@@ -1,4 +1,4 @@
-package com.example.chat_library
+package com.cellact.chat_library
 
 import android.content.ContentValues
 import android.content.Context
@@ -8,16 +8,16 @@ class Index(context: Context) {
 
     fun storeMessage(message: Message) {
         val db = dbHelper.writableDatabase
-        val values = ContentValues().apply {
-            put("messageId", message.messageId)
-            put("sender", message.sender)
-            put("timestamp", message.timestamp)
-            put("type", message.type)
-            put("content", message.content)
+        val values = ContentValues()
+        Message.getStructure().forEach { (key, _) ->
+            val field = message::class.java.getDeclaredField(key)
+            field.isAccessible = true
+            values.put(key, field.get(message).toString())
         }
         db.insert(DatabaseHelper.TABLE_MESSAGES, null, values)
         db.close()
     }
+
 
 
     fun getMessages(start: Int = 0, range: Int = 10): List<Message> {

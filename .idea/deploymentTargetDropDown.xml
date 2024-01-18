@@ -2,7 +2,19 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="ExampleInstrumentedTest">
+      <entry key="ExampleInstrumentedTest (1)">
+        <State />
+      </entry>
+      <entry key="FirestoreInstrumentedTest">
+        <State />
+      </entry>
+      <entry key="FirestoreInstrumentedTest (1)">
+        <State />
+      </entry>
+      <entry key="FirestoreOperationTest">
+        <State />
+      </entry>
+      <entry key="Test">
         <State />
       </entry>
       <entry key="app">

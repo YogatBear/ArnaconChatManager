@@ -1,8 +1,9 @@
-package com.example.chat_library
+package com.cellact.chat_library
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
@@ -12,15 +13,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        val createTableStatement = """
-            CREATE TABLE $TABLE_MESSAGES (
-                messageId TEXT PRIMARY KEY,
-                sender TEXT,
-                timestamp INTEGER,
-                type TEXT,
-                content TEXT
-            )
-        """
+        val structure = Message.getStructure()
+        val columns = structure.entries.joinToString(", ") { "${it.key} ${it.value}" }
+        val createTableStatement = "CREATE TABLE $TABLE_MESSAGES ($columns)"
         db.execSQL(createTableStatement)
     }
 

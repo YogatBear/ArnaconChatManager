@@ -1,4 +1,4 @@
-package com.example.chat_library
+package com.cellact.chat_library
 import android.util.Log
 
 import androidx.test.platform.app.InstrumentationRegistry
@@ -22,21 +22,20 @@ class ExampleInstrumentedTest {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.chat_library", appContext.packageName)
 
-        val chatManager = ChatManager(appContext)
-        val testSender = "user123"
+        val chatManager = ChatManager(appContext, "user123")
         val testType = "text"
         val testContent = "Test message"
 
         // Call sendMessage
-        chatManager.sendMessage(testSender, testType, testContent)
-        chatManager.sendMessage(testSender, testType, testContent)
+        chatManager.sendMessage(testType, testContent)
+        chatManager.sendMessage(testType, testContent)
 
         // Retrieve recent messages
         val recentMessages = chatManager.getRecentMessages()
 
         // Assertions
         assertTrue("Recent messages should include the sent message", recentMessages.any {
-            it.sender == testSender && it.type == testType && it.content == testContent
+            it.sender == "user123" && it.type == testType && it.content == testContent
         })
 
         // Logging for detailed observation

@@ -1,4 +1,4 @@
-package com.example.chat_library
+package com.cellact.chat_library
 
 import java.util.UUID
 import java.time.Instant
@@ -28,5 +28,15 @@ class Message {
         this.content = content
     }
 
-    // Additional functionalities and methods can be added here
+    companion object {
+        fun getStructure(): Map<String, String> {
+            return mapOf(
+                "messageId" to "TEXT",
+                "sender" to "TEXT",
+                "timestamp" to "INTEGER",
+                "type" to "TEXT",
+                "content" to "TEXT"
+            )
+        }
+    }
 }
