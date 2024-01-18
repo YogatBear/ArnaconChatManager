@@ -4,12 +4,14 @@ import java.util.UUID
 import java.time.Instant
 
 class Message {
-    val messageId: String
-    val sender: String
-    val timestamp: Long
-    val type: String
-    val content: String
+    var messageId: String = ""
+    var sender: String = ""
+    var timestamp: Long = 0L
+    var type: String = ""
+    var content: String = ""
 
+    // No-argument constructor for Firebase
+    constructor()
     // Constructor for creating a new message
     constructor(sender: String, type: String, content: String) {
         this.messageId = UUID.randomUUID().toString()

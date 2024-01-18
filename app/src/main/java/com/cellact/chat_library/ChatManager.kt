@@ -1,15 +1,17 @@
 package com.cellact.chat_library
 
 import android.content.Context
-import com.google.firebase.firestore.FirebaseFirestore
-
 
 class ChatManager(private val context: Context, private val user: String) {
     private val chatIndex = Index(context)
     private val pubSub = PubSub(context, user)
 
-    private lateinit var firestore: FirebaseFirestore
-
+    init {
+        pubSub.listenForNewMessages { message ->
+            // Handle the new message here
+            onNewMessageReceived(message)
+        }
+    }
 
     fun sendMessage(type: String, content: String) {
         // Create a new Message object using its constructor for new messages
@@ -20,12 +22,8 @@ class ChatManager(private val context: Context, private val user: String) {
         pubSub.uploadMessage(newMessage)
     }
 
-    fun startListeningForMessages() {
-        pubSub.listenForNewMessages { message ->
-            // This is where you handle the new message.
-            // For example, you can update the UI, store the message, etc.
-            // onNewMessageReceived(message)
-        }
+    private fun onNewMessageReceived(newMessage: Message) {
+        chatIndex.storeMessage(newMessage)
     }
 
     fun getRecentMessages(count: Int = 10): List<Message> {

@@ -44,5 +44,3 @@ class FirestoreOperationTest {
         assertNotNull("Specific message was not found in Firestore within the time limit", messageFound)
     }
 }
-
-// Assume ChatManager is defined elsewhere
