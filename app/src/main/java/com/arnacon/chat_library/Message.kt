@@ -1,4 +1,4 @@
-package com.cellact.chat_library
+package com.arnacon.chat_library
 
 import java.util.UUID
 import java.time.Instant

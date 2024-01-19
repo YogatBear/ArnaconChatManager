@@ -5,16 +5,16 @@
       <entry key="ExampleInstrumentedTest (1)">
         <State />
       </entry>
-      <entry key="FirestoreInstrumentedTest">
+      <entry key="FirestoreMessageReceiveTest">
         <State />
       </entry>
-      <entry key="FirestoreMessageReceiveTest">
+      <entry key="FirestoreMessageReceiveTest (1)">
         <State />
       </entry>
       <entry key="FirestoreOperationTest">
         <State />
       </entry>
-      <entry key="Test">
+      <entry key="IPFSTest">
         <State />
       </entry>
       <entry key="app">

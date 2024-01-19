@@ -1,4 +1,4 @@
-package com.cellact.chat_library
+package com.arnacon.chat_library
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

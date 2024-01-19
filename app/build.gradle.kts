@@ -44,5 +44,7 @@ dependencies {
     implementation (platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation ("com.google.firebase:firebase-firestore-ktx")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")// Use the latest version
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation ("org.json:json:20210307")
 
 }

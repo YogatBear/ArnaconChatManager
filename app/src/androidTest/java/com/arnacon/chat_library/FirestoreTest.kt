@@ -1,4 +1,4 @@
-package com.cellact.chat_library
+package com.arnacon.chat_library
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
