@@ -6,13 +6,16 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
 
 @RunWith(AndroidJUnit4::class)
 class IPFSTest {
 
     private val pinataApiKey = "83becdb068502664cb04"
     private val pinataSecretApiKey = "f8b1977450922eb286b8d77464d68b8d91485dc951687f18a951513cc410b5f8"
-    private val ipfsService = IPFS(pinataApiKey, pinataSecretApiKey)
+    private val pinataService = Pinata(pinataApiKey, pinataSecretApiKey)
+    private val ipfsService = IPFS()
 
     @Test
     fun testUploadAndDownload() {
@@ -22,7 +25,7 @@ class IPFSTest {
             tempFile.writeText("Hello IPFS")
 
             // Upload the file
-            val uploadResponse = ipfsService.uploadToIPFS(tempFile)
+            val uploadResponse = pinataService.uploadToPinata(tempFile)
             val cid = uploadResponse["CID"] ?: throw AssertionError("CID not found")
 
             // Download the file
