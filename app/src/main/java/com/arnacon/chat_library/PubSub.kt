@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.DocumentChange
+import org.json.JSONObject
 
 
 class PubSub(private val context: Context, private val currentUser: String) {
@@ -27,7 +28,9 @@ class PubSub(private val context: Context, private val currentUser: String) {
                 snapshot?.documentChanges?.forEach { doc ->
                     if (doc.type == DocumentChange.Type.ADDED) {
                         val message = doc.document.toObject(Message::class.java)
-                        if (message.sender != currentUser) {
+                        val contentJson = JSONObject(message.content)
+                        val messageSender = contentJson.getString("sender")
+                        if (messageSender != currentUser) {
                             onNewMessageReceived(message)
                         }
                     }

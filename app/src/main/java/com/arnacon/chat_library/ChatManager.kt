@@ -1,13 +1,14 @@
 package com.arnacon.chat_library
 
 import android.content.Context
+import org.json.JSONObject
 import java.io.File
 import java.util.UUID
 
 class ChatManager(private val context: Context, private val user: String) {
     private val chatIndex = Index(context)
     private val pubSub = PubSub(context, user)
-    private val fileManager = FileManager("/storage/emulated/0/Download")
+    private val fileManager = FileManager("/storage/emulated/0/Download", user)
 
     init {
         pubSub.listenForNewMessages { message ->
@@ -18,18 +19,20 @@ class ChatManager(private val context: Context, private val user: String) {
 
     fun sendTextMessage(text: String) {
         val messageId = UUID.randomUUID().toString()
-        // Create a new Message object using its constructor for new messages
-        val newMessage = Message(messageId, user, "text", text)
-        // Store the message in the database
+        val contentJson = JSONObject().apply {
+            put("sender", user) // Assuming 'user' is a class property with the sender's name
+            put("text", text)
+        }
+        val newMessage = Message(messageId, "text", contentJson.toString())
         chatIndex.storeMessage(newMessage)
-        // Upload the message to firestore
         pubSub.uploadMessage(newMessage)
     }
 
     suspend fun sendFileMessage(file: File, text: String) {
         val messageId = UUID.randomUUID().toString()
         val contentJson = fileManager.UploadFile(messageId, file)
-        val newMessage = Message(messageId, user, "file", contentJson.toString())
+        val newMessage = Message(messageId, "file", contentJson.toString())
+        chatIndex.storeMessage(newMessage)
         pubSub.uploadMessage(newMessage)
     }
 

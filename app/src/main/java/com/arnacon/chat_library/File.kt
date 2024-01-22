@@ -6,16 +6,15 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.UUID
 
-class FileManager(private val downloadFolderPath: String) {
+class FileManager(private val downloadFolderPath: String,val user: String) {
 
     private val pinataApiKey = "83becdb068502664cb04"
     private val pinataSecretApiKey = "f8b1977450922eb286b8d77464d68b8d91485dc951687f18a951513cc410b5f8"
     private val pinataService = Pinata(pinataApiKey, pinataSecretApiKey)
     private val ipfsService = IPFS()
 
-    // Method to store a file (upload to IPFS via Pinata)
     suspend fun UploadFile( messageId: String, file: File): JSONObject {
-        val destinationFile = File(downloadFolderPath, "$messageId.$(file.extension)")
+        val destinationFile = File(downloadFolderPath, "$messageId.${(file.extension)}")
         file.copyTo(destinationFile, overwrite = true)
         val cid = pinataService.uploadToPinata(destinationFile)
         return createMetadata(destinationFile, file.name, cid)
@@ -33,6 +32,7 @@ class FileManager(private val downloadFolderPath: String) {
     // Method to create metadata for a file
     fun createMetadata(file: File, filename: String,  cid: String): JSONObject {
         return JSONObject().apply {
+            put ("sender", user)
             put("filename", filename)
             put("filetype", file.extension)
             put("filesize", file.length())

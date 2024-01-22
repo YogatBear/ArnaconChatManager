@@ -20,7 +20,7 @@ class ExampleInstrumentedTest {
     fun testChatManager() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.example.chat_library", appContext.packageName)
+        assertEquals("com.cellact.chat_library", appContext.packageName)
 
         val chatManager = ChatManager(appContext, "user123")
         val testType = "text"
@@ -33,9 +33,10 @@ class ExampleInstrumentedTest {
         // Retrieve recent messages
         val recentMessages = chatManager.getRecentMessages()
 
+
         // Assertions
         assertTrue("Recent messages should include the sent message", recentMessages.any {
-            it.sender == "user123" && it.type == testType && it.content == testContent
+            it.type == testType && it.content == testContent
         })
 
         // Logging for detailed observation

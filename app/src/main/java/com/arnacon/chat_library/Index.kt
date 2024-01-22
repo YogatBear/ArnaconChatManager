@@ -35,12 +35,7 @@ class Index(context: Context) {
 
         val messages = mutableListOf<Message>()
         while (cursor.moveToNext()) {
-            val messageId = cursor.getString(cursor.getColumnIndexOrThrow("messageId"))
-            val sender = cursor.getString(cursor.getColumnIndexOrThrow("sender"))
-            val timestamp = cursor.getLong(cursor.getColumnIndexOrThrow("timestamp"))
-            val type = cursor.getString(cursor.getColumnIndexOrThrow("type"))
-            val content = cursor.getString(cursor.getColumnIndexOrThrow("content"))
-            messages.add(Message(messageId, sender, timestamp, type, content))
+            messages.add(Message(cursor))
         }
         cursor.close()
         db.close()

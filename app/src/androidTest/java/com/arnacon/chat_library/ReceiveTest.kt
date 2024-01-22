@@ -37,7 +37,7 @@ class FirestoreMessageReceiveTest {
         withTimeoutOrNull(10000L) {
             while (!messageReceived) {
                 val recentMessages = chatManager.getRecentMessages()
-                if (recentMessages.any { it.content == "Hello from user2!" && it.sender == "user2" }) {
+                if (recentMessages.any { it.content == "Hello from user2!"}) {
                     messageReceived = true
                     Log.d("ReceiveTest", "Message received from firestore")
                 }
