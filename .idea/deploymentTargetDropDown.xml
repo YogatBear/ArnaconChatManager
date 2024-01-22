@@ -2,7 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="ExampleInstrumentedTest (1)">
+      <entry key="FirestoreFileOperationTest">
         <State />
       </entry>
       <entry key="FirestoreMessageReceiveTest">

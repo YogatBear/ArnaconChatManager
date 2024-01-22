@@ -21,7 +21,7 @@ class FirestoreOperationTest {
         val firestore = FirebaseFirestore.getInstance()
 
         val messageContent = "Test message"
-        chatManager.sendMessage("text", messageContent)
+        chatManager.sendTextMessage("text")
 
         // Listen for changes in Firestore for up to 10 seconds
         val messageFound = withTimeoutOrNull(10000L) {

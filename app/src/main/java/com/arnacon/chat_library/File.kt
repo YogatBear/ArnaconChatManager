@@ -14,8 +14,8 @@ class FileManager(private val downloadFolderPath: String) {
     private val ipfsService = IPFS()
 
     // Method to store a file (upload to IPFS via Pinata)
-    suspend fun UploadFile(file: File): JSONObject {
-        val destinationFile = File(downloadFolderPath, "${UUID.randomUUID()}.$(file.extension)")
+    suspend fun UploadFile( messageId: String, file: File): JSONObject {
+        val destinationFile = File(downloadFolderPath, "$messageId.$(file.extension)")
         file.copyTo(destinationFile, overwrite = true)
         val cid = pinataService.uploadToPinata(destinationFile)
         return createMetadata(destinationFile, file.name, cid)

@@ -27,8 +27,8 @@ class ExampleInstrumentedTest {
         val testContent = "Test message"
 
         // Call sendMessage
-        chatManager.sendMessage(testType, testContent)
-        chatManager.sendMessage(testType, testContent)
+        chatManager.sendTextMessage(testContent)
+        chatManager.sendTextMessage(testContent)
 
         // Retrieve recent messages
         val recentMessages = chatManager.getRecentMessages()
