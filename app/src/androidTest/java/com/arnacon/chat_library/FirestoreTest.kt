@@ -7,6 +7,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
+import org.json.JSONObject
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.Assert.*
@@ -21,21 +22,24 @@ class FirestoreOperationTest {
         val firestore = FirebaseFirestore.getInstance()
 
         val messageContent = "Test message"
-        chatManager.sendTextMessage("text")
+        chatManager.sendTextMessage(messageContent)
 
         // Listen for changes in Firestore for up to 10 seconds
         val messageFound = withTimeoutOrNull(10000L) {
             var found = false
             val listenerRegistration = firestore.collection("messages")
-                .whereEqualTo("content", messageContent)
                 .addSnapshotListener { snapshot: QuerySnapshot?, _ ->
-                    if (snapshot != null && snapshot.documents.isNotEmpty()) {
-                        found = true
+                    snapshot?.documents?.forEach { document ->
+                        val contentJson = JSONObject(document.getString("content"))
+                        val textInMessage = contentJson.optString("text")
+                        if (textInMessage == messageContent) {
+                            found = true
+                        }
                     }
                 }
 
             while (!found) {
-                delay(500)  // Check every 500ms
+                delay(100)  // Check every 100ms
             }
             listenerRegistration.remove()  // Stop listening to changes
             found

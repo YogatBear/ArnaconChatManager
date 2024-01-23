@@ -8,6 +8,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.tasks.await
 import android.util.Log
+import org.json.JSONObject
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.Assert.*
@@ -21,12 +22,15 @@ class FirestoreMessageReceiveTest {
         val firestore = FirebaseFirestore.getInstance()
 
         // Simulate a message sent to "user1"
+        val contentJson = JSONObject().apply {
+            put("sender", "user2")
+            put("text", "Hello from user2!")
+        }.toString()
         val simulatedMessage = hashMapOf(
             "messageId" to "msg123",
-            "sender" to "user2",
             "timestamp" to System.currentTimeMillis(),
             "type" to "text",
-            "content" to "Hello from user2!"
+            "content" to contentJson
         )
         firestore.collection("messages").add(simulatedMessage).await()
 
@@ -37,9 +41,15 @@ class FirestoreMessageReceiveTest {
         withTimeoutOrNull(10000L) {
             while (!messageReceived) {
                 val recentMessages = chatManager.getRecentMessages()
-                if (recentMessages.any { it.content == "Hello from user2!"}) {
-                    messageReceived = true
-                    Log.d("ReceiveTest", "Message received from firestore")
+                for (message in recentMessages) {
+                    val messageContentJson = JSONObject(message.content)
+                    val sender = messageContentJson.optString("sender")
+                    val text = messageContentJson.optString("text")
+                    if (sender == "user2" && text == "Hello from user2!") {
+                        messageReceived = true
+                        Log.d("ReceiveTest", "Message received from firestore")
+                        break
+                    }
                 }
                 delay(500)  // Check every 500ms
             }

@@ -3,6 +3,7 @@ import android.util.Log
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.json.JSONObject
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -35,8 +36,13 @@ class ExampleInstrumentedTest {
 
 
         // Assertions
-        assertTrue("Recent messages should include the sent message", recentMessages.any {
-            it.type == testType && it.content == testContent
+        assertTrue("Recent messages should include the sent message", recentMessages.any { message ->
+            // Parse the content JSON to get the sender and text
+            val contentJson = JSONObject(message.content)
+            val senderInMessage = contentJson.optString("sender")
+            val textInMessage = contentJson.optString("text")
+
+            senderInMessage == "user123" && message.type == testType && textInMessage == testContent
         })
 
         // Logging for detailed observation
