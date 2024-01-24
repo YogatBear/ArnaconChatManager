@@ -28,7 +28,7 @@ class FirestoreFileOperationTest {
             val testFile = createTestFile(appContext.filesDir, "testFile.txt", "Test file content")
 
             // Sending the file message
-            chatManager.sendFileMessage(testFile, "file")
+            chatManager.sendFileMessage("file", testFile)
 
             // Listen for changes in Firestore for up to 10 seconds
             val messageFound = withTimeoutOrNull(10000L) {
