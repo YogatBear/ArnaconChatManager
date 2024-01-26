@@ -54,19 +54,31 @@ class MessagesAdapter(private val messages: MutableList<DisplayedMessage>, priva
 
     class MyMessageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val messageText: TextView = view.findViewById(R.id.text_gchat_message_me)
+        private val dateText: TextView = view.findViewById(R.id.text_gchat_date_me)
+        private val timeText: TextView = view.findViewById(R.id.text_gchat_timestamp_me)
 
         fun bind(message: DisplayedMessage.TextMessage) {
             messageText.text = message.text
+            dateText.text = message.formattedDate
+            timeText.text = message.formattedTime
         }
     }
 
     class OtherMessageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val messageText: TextView = view.findViewById(R.id.text_gchat_message_other)
         private val userNameText: TextView = view.findViewById(R.id.text_gchat_user_other)
-
+        private val dateText: TextView = view.findViewById(R.id.text_gchat_date_other)
+        private val timeText: TextView = view.findViewById(R.id.text_gchat_timestamp_other)
         fun bind(message: DisplayedMessage.TextMessage) {
             messageText.text = message.text
             userNameText.text = message.sender  // Set the sender's name dynamically
+            dateText.text = message.formattedDate
+            timeText.text = message.formattedTime
         }
+    }
+    fun setMessages(newMessages: List<DisplayedMessage>) {
+        messages.clear()
+        messages.addAll(newMessages)
+        notifyDataSetChanged()
     }
 }

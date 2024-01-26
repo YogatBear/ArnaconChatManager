@@ -6,10 +6,9 @@ import java.io.File
 import java.util.UUID
 
 class Storage(private val context: Context,
-              private val user: String,
               private val downloadFolderPath: String) {
     private val chatIndex = Index(context)
-    private val fileManager = FileManager(downloadFolderPath, user)
+    private val fileManager = FileManager(downloadFolderPath)
 
     fun storeMessage(message: Message) {
         chatIndex.storeMessage(message)
@@ -20,16 +19,8 @@ class Storage(private val context: Context,
         return chatIndex.getMessages(start, count)
     }
 
-    fun textMetadata(text: String): String {
-        val contentJson = JSONObject().apply {
-            put("sender", user)
-            put("text", text)
-        }
-        return contentJson.toString()
-    }
-
-    suspend fun fileMetadata(messageId: String, file: File): String {
-        val contentJson = fileManager.UploadFile(messageId, file)
+    suspend fun uploadFile(user: String, messageId: String, file: File): String {
+        val contentJson = fileManager.UploadFile(user, messageId, file)
         return contentJson.toString()
     }
 }
