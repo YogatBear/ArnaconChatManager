@@ -1,31 +1,34 @@
 package com.arnacon.chat_library
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.arnacon.chat_library.R
-
 
 class ChatRoomActivity : AppCompatActivity(), ChatManager.ChatUpdateListener {
 
     private lateinit var messagesRecyclerView: RecyclerView
     private lateinit var messageEditText: EditText
     private lateinit var sendButton: Button
-    private val messagesAdapter = MessagesAdapter(mutableListOf(), "user123") // Replace "user123" with current user
+    private lateinit var messagesAdapter: MessagesAdapter // Declare without initializing
     private lateinit var chatManager: ChatManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.recyclerview)
 
-        messagesRecyclerView = findViewById(R.id.recycler_gchat)
+        val username = intent.getStringExtra("username") ?: "user123" // Get the username from the intent
+
+        messagesAdapter = MessagesAdapter(mutableListOf(), username) // Initialize with the actual username
+        setUpRecyclerView()
+
         messageEditText = findViewById(R.id.edit_gchat_message)
         sendButton = findViewById(R.id.button_gchat_send)
-        messagesRecyclerView.adapter = messagesAdapter
 
-        chatManager = ChatManager(this, "user123") // Replace "user123" with the actual user identifier
+        chatManager = ChatManager(this, username) // Initialize ChatManager with the actual username
         chatManager.updateListener = this
 
         sendButton.setOnClickListener {
@@ -35,13 +38,29 @@ class ChatRoomActivity : AppCompatActivity(), ChatManager.ChatUpdateListener {
                 messageEditText.text.clear()
             }
         }
+    }
 
-        // Implement message reception logic...
+    private fun setUpRecyclerView() {
+        messagesRecyclerView = findViewById(R.id.recycler_gchat)
+        messagesRecyclerView.layoutManager = LinearLayoutManager(this)
+        messagesRecyclerView.adapter = messagesAdapter
     }
 
     override fun onNewMessage(displayedMessage: DisplayedMessage) {
         runOnUiThread {
+            Log.d("ChatRoomActivity", "Received new message: $displayedMessage")
             messagesAdapter.addMessage(displayedMessage)
+            Log.d("ChatRoomActivity", "Message added to adapter")
+            messagesRecyclerView.scrollToPosition(messagesAdapter.itemCount - 1)
+        }
+    }
+
+    override fun onNewMessages(displayedMessages: List<DisplayedMessage>) {
+        runOnUiThread {
+            displayedMessages.forEach { displayedMessage ->
+                messagesAdapter.addMessage(displayedMessage)
+            }
+            messagesRecyclerView.scrollToPosition(messagesAdapter.itemCount - 1)
         }
     }
 }

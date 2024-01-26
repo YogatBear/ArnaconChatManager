@@ -1,6 +1,7 @@
 package com.arnacon.chat_library
 
 import android.content.Context
+import android.util.Log
 import java.io.File
 import java.util.UUID
 
@@ -10,6 +11,12 @@ class ChatManager(private val context: Context, private val user: String) {
     var updateListener: ChatUpdateListener? = null
 
     init {
+        val recentMessages = getRecentMessages(0, 9)
+        val displayedMessages = recentMessages.map { message ->
+            DisplayedMessage.fromMessage(message)
+        }
+        updateListener?.onNewMessages(displayedMessages)
+
         pubSub.listenForNewMessages { message ->
             onNewMessageReceived(message)
         }
@@ -17,6 +24,7 @@ class ChatManager(private val context: Context, private val user: String) {
 
     interface ChatUpdateListener {
         fun onNewMessage(displayedMessage: DisplayedMessage)
+        fun onNewMessages(displayedMessages: List<DisplayedMessage>) // Add this method
     }
 
     fun sendTextMessage(text: String) {
@@ -28,7 +36,10 @@ class ChatManager(private val context: Context, private val user: String) {
         pubSub.uploadMessage(newMessage)
 
         val displayedMessage = DisplayedMessage.fromMessage(newMessage)
+
         updateListener?.onNewMessage(displayedMessage)
+
+        Log.d("ChatRoomActivity", "$displayedMessage")
     }
 
     suspend fun sendFileMessage(text: String, file: File) {
