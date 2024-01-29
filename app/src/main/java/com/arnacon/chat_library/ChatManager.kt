@@ -54,7 +54,9 @@ class ChatManager(private val context: Context, private val user: String) {
 
     private suspend fun onNewMessageReceived(newMessage: Message) {
         storage.storeMessage(newMessage)
-        storage.downloadFile(newMessage.messageId, newMessage.content)
+        if (newMessage.type == "file") {
+            storage.downloadFile(newMessage.messageId, newMessage.content)
+        }
         val displayedMessage = DisplayedMessage.fromMessage(newMessage, storage)
         updateListener?.onNewMessage(displayedMessage)
     }
