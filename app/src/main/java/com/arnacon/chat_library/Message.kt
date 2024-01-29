@@ -21,14 +21,6 @@ class Message {
         this.content = content
     }
 
-    // Constructor for received message
-    constructor(messageId: String, sender: String, timestamp: Long, type: String, content: String) {
-        this.messageId = messageId
-        this.timestamp = timestamp
-        this.type = type
-        this.content = content
-    }
-
     // Constructor to build from a Cursor
     constructor(cursor: Cursor) {
         messageId = cursor.getString(cursor.getColumnIndexOrThrow("messageId"))

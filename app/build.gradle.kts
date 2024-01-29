@@ -70,6 +70,7 @@ dependencies {
     implementation ("org.json:json:20210307")
     implementation ("com.github.stfalcon-studio:Chatkit:0.4.1")
     implementation ("com.google.android.flexbox:flexbox:3.0.0")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)

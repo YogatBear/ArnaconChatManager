@@ -1,14 +1,12 @@
 package com.arnacon.chat_library
 
 import android.content.Context
+import android.net.Uri
 import org.json.JSONObject
-import java.io.File
-import java.util.UUID
 
-class Storage(private val context: Context,
-              private val downloadFolderPath: String) {
+class Storage(private val context: Context) {
     private val chatIndex = Index(context)
-    private val fileManager = FileManager(downloadFolderPath)
+    private val fileManager = FileManager(context)
 
     fun storeMessage(message: Message) {
         chatIndex.storeMessage(message)
@@ -19,8 +17,18 @@ class Storage(private val context: Context,
         return chatIndex.getMessages(start, count)
     }
 
-    suspend fun uploadFile(user: String, messageId: String, file: File): String {
-        val contentJson = fileManager.UploadFile(user, messageId, file)
+    suspend fun uploadFile(user: String, messageId: String, uri: String): String {
+        val contentJson = fileManager.uploadFile(user, messageId, uri)
         return contentJson.toString()
+    }
+
+    suspend fun downloadFile(messageId: String, contentJson: String) {
+        val jsonObject = JSONObject(contentJson)
+        val cid = jsonObject.getString("cid")
+        fileManager.downloadFile(messageId, cid)
+    }
+
+    fun getFileUri(messageId: String): Uri? {
+        return fileManager.getFileUri(messageId)
     }
 }

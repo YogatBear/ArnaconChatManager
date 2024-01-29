@@ -39,6 +39,6 @@ class Index(context: Context) {
         }
         cursor.close()
         db.close()
-        return messages
+        return messages.reversed()
     }
 }

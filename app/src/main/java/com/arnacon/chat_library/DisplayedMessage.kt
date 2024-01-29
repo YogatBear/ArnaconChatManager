@@ -1,5 +1,6 @@
 package com.arnacon.chat_library
 
+import android.net.Uri
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -27,11 +28,11 @@ sealed class DisplayedMessage(
         val filename: String,
         val filetype: String,
         val filesize: Long,
-        val cid: String
+        val fileUri: Uri
     ) : DisplayedMessage(messageId, sender, formattedDate, formattedTime)
 
     companion object {
-        fun fromMessage(message: Message): DisplayedMessage {
+        fun fromMessage(message: Message, storage: Storage): DisplayedMessage {
             val contentJson = JSONObject(message.content)
             val date = Date(message.timestamp)
             val dateFormat = SimpleDateFormat("MMMM d", Locale.getDefault())
@@ -47,16 +48,19 @@ sealed class DisplayedMessage(
                     formattedTime = formattedTime,
                     text = contentJson.getString("text")
                 )
-                "file" -> FileMessage(
-                    messageId = message.messageId,
-                    sender = contentJson.getString("sender"),
-                    formattedDate = formattedDate,
-                    formattedTime = formattedTime,
-                    filename = contentJson.getString("filename"),
-                    filetype = contentJson.getString("filetype"),
-                    filesize = contentJson.getLong("filesize"),
-                    cid = contentJson.getString("cid")
-                )
+                "file" -> {
+                    val fileUri = storage.getFileUri(message.messageId)
+                    FileMessage(
+                        messageId = message.messageId,
+                        sender = contentJson.getString("sender"),
+                        formattedDate = formattedDate,
+                        formattedTime = formattedTime,
+                        filename = contentJson.getString("filename"),
+                        filetype = contentJson.getString("filetype"),
+                        filesize = contentJson.getLong("filesize"),
+                        fileUri = fileUri ?: Uri.EMPTY
+                    )
+                }
                 else -> throw IllegalArgumentException("Unknown message type: ${message.type}")
             }
         }
