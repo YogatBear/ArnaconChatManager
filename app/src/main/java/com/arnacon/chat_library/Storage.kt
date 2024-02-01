@@ -5,16 +5,15 @@ import android.net.Uri
 import org.json.JSONObject
 
 class Storage(private val context: Context) {
-    private val chatIndex = Index(context)
+    private val index: Index = SQLiteIndex(DatabaseHelper(context))
     private val fileManager = FileManager(context)
 
     fun storeMessage(message: Message) {
-        chatIndex.storeMessage(message)
+        index.storeMessage(message)
     }
 
     fun getMessages(start: Int, count: Int): List<Message> {
-        // Retrieve the most recent 'count' messages
-        return chatIndex.getMessages(start, count)
+        return index.getMessages(start, count)
     }
 
     suspend fun uploadFile(user: String, messageId: String, uri: String): String {

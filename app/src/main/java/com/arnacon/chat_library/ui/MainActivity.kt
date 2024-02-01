@@ -52,7 +52,11 @@ class ChatRoomActivity : AppCompatActivity(), ChatManager.ChatUpdateListener {
         sendButton.setOnClickListener {
             val messageText = messageEditText.text.toString()
             if (messageText.isNotBlank()) {
-                chatManager.sendTextMessage(messageText)
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val newMessage = chatManager.NewMessage("text", messageText)
+                    chatManager.StoreMessage(newMessage)
+                    chatManager.UploadMessage(newMessage)
+                }
                 messageEditText.text.clear()
             }
         }
@@ -105,7 +109,9 @@ class ChatRoomActivity : AppCompatActivity(), ChatManager.ChatUpdateListener {
         if (requestCode == imageRequestCode && resultCode == RESULT_OK) {
             data?.data?.let { uri ->
                 lifecycleScope.launch(Dispatchers.IO) {
-                    chatManager.sendFileMessage("Image", uri)
+                    val newMessage = chatManager.NewMessage("file", "Image", uri)
+                    chatManager.StoreMessage(newMessage)
+                    chatManager.UploadMessage(newMessage)
                 }
             }
         }

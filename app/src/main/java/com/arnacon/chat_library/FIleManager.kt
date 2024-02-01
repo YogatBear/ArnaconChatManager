@@ -12,9 +12,7 @@ import java.io.IOException
 
 class FileManager(private val context: Context) {
 
-    private val pinataApiKey = "83becdb068502664cb04"
-    private val pinataSecretApiKey = "f8b1977450922eb286b8d77464d68b8d91485dc951687f18a951513cc410b5f8"
-    private val pinataService = Pinata(pinataApiKey, pinataSecretApiKey)
+    private val pinataService = Pinata()
     private val ipfsService = IPFS()
     private val metadata = Metadata()
 

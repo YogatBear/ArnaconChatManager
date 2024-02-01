@@ -6,7 +6,9 @@ import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 
-class Pinata(private val pinataApiKey: String, private val pinataSecretApiKey: String) {
+class Pinata() {
+    private val pinataApiKey = "83becdb068502664cb04"
+    private val pinataSecretApiKey = "f8b1977450922eb286b8d77464d68b8d91485dc951687f18a951513cc410b5f8"
 
     private val client = OkHttpClient()
 
