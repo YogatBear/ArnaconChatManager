@@ -5,11 +5,11 @@ import android.database.Cursor
 import java.time.Instant
 import java.util.UUID
 
-class Message private constructor(
-    val messageId: String,
-    val timestamp: Long,
-    val type: String,
-    val content: String
+data class Message(
+    val messageId: String = UUID.randomUUID().toString(),
+    val timestamp: Long = Instant.now().toEpochMilli(),
+    val type: String = "",
+    val content: String = ""
 ) {
 
     class Builder {

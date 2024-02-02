@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.arnacon.chat_library.DisplayedMessage
-import com.arnacon.chat_library.R
 
 class MessageAdapter(
     private val messages: MutableList<DisplayedMessage>,
@@ -77,13 +75,15 @@ class MessageAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val message = messages[position]
+        val showDate = position == 0 || message.formattedDate != messages[position - 1].formattedDate
+
         when (holder) {
-            is MyMessageViewHolder -> holder.bind(message as DisplayedMessage.TextMessage)
-            is OtherMessageViewHolder -> holder.bind(message as DisplayedMessage.TextMessage)
-            is MyFileMessageViewHolder -> holder.bind(message as DisplayedMessage.FileMessage)
-            is OtherFileMessageViewHolder -> holder.bind(message as DisplayedMessage.FileMessage)
-            is MyImageMessageViewHolder -> holder.bind(message as DisplayedMessage.FileMessage)
-            is OtherImageMessageViewHolder -> holder.bind(message as DisplayedMessage.FileMessage, message.sender)
+            is MyMessageViewHolder -> holder.bind(message as DisplayedMessage.TextMessage, showDate)
+            is OtherMessageViewHolder -> holder.bind(message as DisplayedMessage.TextMessage, showDate)
+            is MyFileMessageViewHolder -> holder.bind(message as DisplayedMessage.FileMessage, showDate)
+            is OtherFileMessageViewHolder -> holder.bind(message as DisplayedMessage.FileMessage, showDate)
+            is MyImageMessageViewHolder -> holder.bind(message as DisplayedMessage.FileMessage, showDate)
+            is OtherImageMessageViewHolder -> holder.bind(message as DisplayedMessage.FileMessage, showDate)
         }
     }
 
@@ -99,7 +99,8 @@ class MessageAdapter(
         private val dateText: TextView = view.findViewById(R.id.text_gchat_date_me)
         private val timeText: TextView = view.findViewById(R.id.text_gchat_timestamp_me)
 
-        fun bind(message: DisplayedMessage.TextMessage) {
+        fun bind(message: DisplayedMessage.TextMessage, showDate: Boolean) {
+            dateText.visibility = if (showDate) View.VISIBLE else View.GONE
             messageText.text = message.text
             dateText.text = message.formattedDate
             timeText.text = message.formattedTime
@@ -112,7 +113,8 @@ class MessageAdapter(
         private val dateText: TextView = view.findViewById(R.id.text_gchat_date_other)
         private val timeText: TextView = view.findViewById(R.id.text_gchat_timestamp_other)
 
-        fun bind(message: DisplayedMessage.TextMessage) {
+        fun bind(message: DisplayedMessage.TextMessage, showDate: Boolean) {
+            dateText.visibility = if (showDate) View.VISIBLE else View.GONE
             messageText.text = message.text
             userNameText.text = message.sender
             dateText.text = message.formattedDate
@@ -123,23 +125,32 @@ class MessageAdapter(
     class MyFileMessageViewHolder(view: View, private val onFileClick: (Uri) -> Unit) : RecyclerView.ViewHolder(view) {
         private val fileNameText: TextView = view.findViewById(R.id.text_file_name_me)
         private val fileSizeText: TextView = view.findViewById(R.id.text_file_size_me)
+        private val dateText: TextView = view.findViewById(R.id.text_gchat_date_other)
+        private val timeText: TextView = view.findViewById(R.id.text_gchat_timestamp_other)
 
-        fun bind(message: DisplayedMessage.FileMessage) {
+        fun bind(message: DisplayedMessage.FileMessage, showDate: Boolean) {
+            dateText.visibility = if (showDate) View.VISIBLE else View.GONE
             fileNameText.text = message.filename
             fileSizeText.text = message.filesize.toString()
-            val fileUri = Uri.parse(message.fileUri.toString()) // Assuming fileUri is a string
+            dateText.text = message.formattedDate
+            timeText.text = message.formattedTime
 
-            itemView.setOnClickListener { onFileClick(fileUri) }
+            itemView.setOnClickListener { onFileClick(message.fileUri) }
         }
     }
 
     class OtherFileMessageViewHolder(view: View, private val onFileClick: (Uri) -> Unit) : RecyclerView.ViewHolder(view) {
         private val fileNameText: TextView = view.findViewById(R.id.text_file_name_other)
         private val fileSizeText: TextView = view.findViewById(R.id.text_file_size_other)
+        private val dateText: TextView = view.findViewById(R.id.text_image_date)
+        private val timeText: TextView = view.findViewById(R.id.text_image_timestamp)
 
-        fun bind(message: DisplayedMessage.FileMessage) {
+        fun bind(message: DisplayedMessage.FileMessage, showDate: Boolean) {
+            dateText.visibility = if (showDate) View.VISIBLE else View.GONE
             fileNameText.text = message.filename
             fileSizeText.text = message.filesize.toString()
+            dateText.text = message.formattedDate
+            timeText.text = message.formattedTime
 
             itemView.setOnClickListener { onFileClick(message.fileUri) }
         }
@@ -147,19 +158,29 @@ class MessageAdapter(
 
     class MyImageMessageViewHolder(view: View, private val onFileClick: (Uri) -> Unit) : RecyclerView.ViewHolder(view) {
         private val imageView: ImageView = view.findViewById(R.id.image_message)
+        private val dateText: TextView = view.findViewById(R.id.text_image_date)
+        private val timeText: TextView = view.findViewById(R.id.text_image_timestamp)
 
-        fun bind(message: DisplayedMessage.FileMessage) {
+        fun bind(message: DisplayedMessage.FileMessage, showDate: Boolean) {
+            dateText.visibility = if (showDate) View.VISIBLE else View.GONE
             imageView.setImageURI(message.fileUri)
+            dateText.text = message.formattedDate
+            timeText.text = message.formattedTime
         }
     }
 
     class OtherImageMessageViewHolder(view: View, private val onFileClick: (Uri) -> Unit) : RecyclerView.ViewHolder(view) {
         private val imageView: ImageView = view.findViewById(R.id.image_message_other)
-        private val senderNameText: TextView = view.findViewById(R.id.text_gchat_user_other) // Add this if you want to show sender name
+        private val senderNameText: TextView = view.findViewById(R.id.text_gchat_user_other)
+        private val dateText: TextView = view.findViewById(R.id.text_gchat_date_other)
+        private val timeText: TextView = view.findViewById(R.id.text_gchat_timestamp_other)
 
-        fun bind(message: DisplayedMessage.FileMessage, senderName: String) {
+        fun bind(message: DisplayedMessage.FileMessage, showDate: Boolean) {
+            dateText.visibility = if (showDate) View.VISIBLE else View.GONE
             imageView.setImageURI(message.fileUri)
-            senderNameText.text = senderName // Set the sender's name
+            dateText.text = message.formattedDate
+            timeText.text = message.formattedTime
+            senderNameText.text = message.sender
         }
     }
 
