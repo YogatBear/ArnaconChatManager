@@ -2,6 +2,7 @@ package com.arnacon.chat_library
 
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
@@ -15,7 +16,9 @@ class Pinata() {
     suspend fun uploadToPinata(file: File): String {
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
-            .addFormDataPart("file", file.name, RequestBody.create("application/octet-stream".toMediaTypeOrNull(), file))
+            .addFormDataPart("file", file.name,
+                file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
+            )
             .build()
 
         val request = Request.Builder()

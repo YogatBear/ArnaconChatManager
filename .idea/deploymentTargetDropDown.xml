@@ -18,9 +18,6 @@
           <timeTargetWasSelectedWithDropDown value="2024-01-26T09:51:57.699976Z" />
         </State>
       </entry>
-      <entry key="ExampleInstrumentedTest">
-        <State />
-      </entry>
       <entry key="FirestoreFileOperationTest">
         <State />
       </entry>
@@ -43,7 +40,29 @@
           <timeTargetWasSelectedWithDropDown value="2024-03-27T12:00:07.135020Z" />
         </State>
       </entry>
+      <entry key="UsernameActivity (1)">
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="$USER_HOME$/.android/avd/Pixel_3a_API_34_extension_level_7_arm64-v8a.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-03-27T17:12:53.857609Z" />
+        </State>
+      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="chat_app">
+        <State />
+      </entry>
+      <entry key="chat_library">
         <State />
       </entry>
     </value>

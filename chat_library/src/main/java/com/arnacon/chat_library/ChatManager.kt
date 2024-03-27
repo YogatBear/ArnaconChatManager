@@ -4,9 +4,7 @@ import android.content.Context
 import android.net.Uri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 class ChatManager(context: Context, private val user: String) {
     private val scope = CoroutineScope(Dispatchers.IO)

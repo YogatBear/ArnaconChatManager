@@ -17,7 +17,7 @@
         android:theme="@style/Theme.Chat_library"
         tools:targetApi="31">
         <activity
-            android:name="com.arnacon.chat_library.UsernameActivity"
+            android:name="com.arnacon.chat_app.UsernameActivity"
             android:exported="true"
             android:label="@string/title_username_activity"
             android:theme="@style/Theme.Chat_library">
@@ -27,13 +27,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.arnacon.chat_library.ChatRoomActivity"
+            android:name="com.arnacon.chat_app.ChatRoomActivity"
             android:exported="true"
-        android:label="@string/title_activity_chat"
-        android:theme="@style/Theme.Chat_library" />
+            android:label="@string/title_activity_chat"
+            android:theme="@style/Theme.Chat_library" />
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.arnacon.chat_library.provider"
+            android:authorities="com.arnacon.chat_app.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

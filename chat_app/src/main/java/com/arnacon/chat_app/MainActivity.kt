@@ -1,4 +1,4 @@
-package com.arnacon.chat_library
+package com.arnacon.chat_app
 
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
+import com.arnacon.chat_library.ChatManager
+import com.arnacon.chat_library.DisplayedMessage
 
 class ChatRoomActivity : AppCompatActivity(), ChatManager.ChatUpdateListener {
 

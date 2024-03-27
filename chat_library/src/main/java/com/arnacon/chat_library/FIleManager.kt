@@ -88,7 +88,7 @@ class FileManager(private val context: Context, private val fileSharingStrategy:
             val file = files?.firstOrNull()
 
             if (file != null && file.exists()) {
-                val contentUri = FileProvider.getUriForFile(context, "com.arnacon.chat_library.provider", file)
+                val contentUri = FileProvider.getUriForFile(context, "${context.applicationContext.packageName}.provider", file)
                 Log.d("FileManager", "Generated Content URI: $contentUri")
                 return contentUri
             } else {

@@ -24,4 +24,5 @@ dependencyResolutionManagement {
 
 
 rootProject.name = "chat_library"
-include(":app")
+include(":chat_app")
+include(":chat_library")

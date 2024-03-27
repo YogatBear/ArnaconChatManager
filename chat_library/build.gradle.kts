@@ -1,7 +1,6 @@
 plugins {
-    alias(libs.plugins.androidApplication)
+    id("com.android.library")
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    id("com.google.gms.google-services")
 }
 
 android {
@@ -9,11 +8,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.arnacon.chat_library"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = 27
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -45,6 +40,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {

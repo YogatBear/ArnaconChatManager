@@ -1,4 +1,4 @@
-package com.arnacon.chat_library
+package com.arnacon.chat_app
 
 import android.net.Uri
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+
+import com.arnacon.chat_library.DisplayedMessage
 
 class MessageAdapter(
     private val messages: MutableList<DisplayedMessage>,

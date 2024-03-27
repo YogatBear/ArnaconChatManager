@@ -1,4 +1,4 @@
-package com.arnacon.chat_library
+package com.arnacon.chat_app
 
 import android.content.Intent
 import android.os.Bundle

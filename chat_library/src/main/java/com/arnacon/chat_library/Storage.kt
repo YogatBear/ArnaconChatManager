@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import org.json.JSONObject
 
-class Storage(private val context: Context) {
+class Storage(context: Context) {
     /*
     init {
         // Delete the existing database
