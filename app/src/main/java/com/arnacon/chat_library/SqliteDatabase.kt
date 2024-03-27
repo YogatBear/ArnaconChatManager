@@ -1,5 +1,6 @@
 package com.arnacon.chat_library
 
+import android.app.Application
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
@@ -39,7 +40,7 @@ class SQLiteIndex(private val dbHelper: DatabaseHelper) : Index {
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
-        private const val DATABASE_NAME = "chat_database.db"
+        const val DATABASE_NAME = "chat_database.db"
         private const val DATABASE_VERSION = 1
         const val TABLE_MESSAGES = "messages"
     }

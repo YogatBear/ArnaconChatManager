@@ -64,9 +64,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation (platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation ("com.google.firebase:firebase-storage")
     implementation ("com.google.firebase:firebase-firestore-ktx")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
     implementation ("org.json:json:20210307")
     implementation ("com.google.android.flexbox:flexbox:3.0.0")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
@@ -74,10 +75,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-    modules {
-        module("com.google.android:flexbox") {
-            replacedBy("com.google.android.flexbox:flexbox")
-        }
-    }
 }

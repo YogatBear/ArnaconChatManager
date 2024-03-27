@@ -14,6 +14,7 @@ class FileManager(private val context: Context) {
 
     private val pinataService = Pinata()
     private val ipfsService = IPFS()
+    private val gcsService = GCS("app-storage")
     private val metadata = Metadata()
 
     private fun getAppSpecificExternalDir(): File {
@@ -26,6 +27,7 @@ class FileManager(private val context: Context) {
                 Log.d("FileManager", "Directory created: ${directory.absolutePath}")
             }
         }
+        Log.e("FileManager", directory.absolutePath)
         return directory
     }
 
@@ -43,7 +45,8 @@ class FileManager(private val context: Context) {
                 }
             }
 
-            val cid = pinataService.uploadToPinata(destinationFile)
+            // val cid = pinataService.uploadToPinata(destinationFile)
+            val cid = gcsService.uploadFile(destinationFile)
             return metadata.fileMetadata(user, destinationFile, fileName, cid)
         } catch (e: Exception) {
             Log.e("FileManager", "Error uploading file: ${e.message}")
@@ -68,7 +71,8 @@ class FileManager(private val context: Context) {
     suspend fun downloadFile(messageId: String, cid: String): File? {
         try {
             val destinationFile = File(getAppSpecificExternalDir(), messageId)
-            ipfsService.downloadFromIPFS(cid, destinationFile)
+            // ipfsService.downloadFromIPFS(cid, destinationFile)
+            gcsService.downloadFile(cid, destinationFile)
             return destinationFile
         } catch (e: IOException) {
             Log.e("FileManager", "Error downloading file: ${e.message}")

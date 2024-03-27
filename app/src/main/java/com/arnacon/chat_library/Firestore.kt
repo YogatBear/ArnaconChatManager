@@ -7,7 +7,7 @@ import com.google.firebase.firestore.DocumentChange
 import org.json.JSONObject
 
 
-class Firestore(private val context: Context, private val currentUser: String): PubSub {
+class Firestore(private val currentUser: String): PubSub {
     private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
 

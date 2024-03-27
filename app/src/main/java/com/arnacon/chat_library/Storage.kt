@@ -5,6 +5,12 @@ import android.net.Uri
 import org.json.JSONObject
 
 class Storage(private val context: Context) {
+    /*
+    init {
+        // Delete the existing database
+        context.deleteDatabase(DatabaseHelper.DATABASE_NAME)
+    }
+     */
     private val index: Index = SQLiteIndex(DatabaseHelper(context))
     private val fileManager = FileManager(context)
 
