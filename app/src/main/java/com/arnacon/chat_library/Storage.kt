@@ -12,7 +12,7 @@ class Storage(private val context: Context) {
     }
      */
     private val index: Index = SQLiteIndex(DatabaseHelper(context))
-    private val fileManager = FileManager(context)
+    private val fileManager = FileManager(context,GCS())
 
     fun storeMessage(message: Message) {
         index.storeMessage(message)

@@ -1,29 +1,25 @@
 package com.arnacon.chat_library
 
-
 import androidx.core.net.toUri
 import java.io.File
 import java.io.FileInputStream
-import com.google.common.io.ByteStreams
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.google.firebase.storage.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
-import java.nio.channels.Channels
 import java.security.MessageDigest
 
-class GCS(private val bucketName: String) {
+class GCS() : FileSharingStrategy {
 
     private val storage = Firebase.storage("gs://dulcet-clock-403610.appspot.com")
     private val storageRef = storage.reference
 
 
-    suspend fun uploadFile(file: File): String {
+    override suspend fun uploadFile(file: File): String {
         val fileHash = hashFile(file)
         val fileRef = storageRef.child(fileHash)
 
@@ -40,12 +36,12 @@ class GCS(private val bucketName: String) {
         }
     }
 
-    suspend fun downloadFile(downloadUrl: String, destinationFile: File) {
+    override suspend fun downloadFile(fileId: String, destinationFile: File) {
         withContext(Dispatchers.IO) {
             val client = OkHttpClient()
 
             val request = Request.Builder()
-                .url(downloadUrl)
+                .url(fileId)
                 .build()
 
             // Execute the request

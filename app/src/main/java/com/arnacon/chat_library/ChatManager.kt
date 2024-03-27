@@ -8,9 +8,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.UUID
 
-class ChatManager(private val context: Context, private val user: String) {
+class ChatManager(context: Context, private val user: String) {
     private val scope = CoroutineScope(Dispatchers.IO)
-
     private val pubSub: PubSub = Firestore(user)
     private val storage = Storage(context)
     private val metadata = Metadata()
@@ -27,7 +26,7 @@ class ChatManager(private val context: Context, private val user: String) {
         fun onNewMessages(displayedMessages: List<DisplayedMessage>)
     }
 
-    suspend fun NewMessage(messageType: String, content: String, uri: Uri? = null): Message {
+    suspend fun newMessage(messageType: String, content: String, uri: Uri? = null): Message {
         val messageBuilder = Message.Builder().type(messageType)
 
         val contentJson = when (messageType) {

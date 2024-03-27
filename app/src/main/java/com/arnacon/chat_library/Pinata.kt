@@ -30,7 +30,6 @@ class Pinata() {
 
             val responseBody = response.body?.string() ?: throw IOException("Response body is null")
             val json = JSONObject(responseBody)
-            val fileExtension = file.name.substringAfterLast('.', "")
 
             return json.getString("IpfsHash")
         }
