@@ -12,12 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.arnacon.chat_library.ChatManager
+import com.arnacon.chat_library.DisplayedMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
-import com.arnacon.chat_library.ChatManager
-import com.arnacon.chat_library.DisplayedMessage
 
 class ChatRoomActivity : AppCompatActivity(), ChatManager.ChatUpdateListener {
 
@@ -53,11 +52,8 @@ class ChatRoomActivity : AppCompatActivity(), ChatManager.ChatUpdateListener {
         sendButton.setOnClickListener {
             val messageText = messageEditText.text.toString()
             if (messageText.isNotBlank()) {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    val newMessage = chatManager.newMessage("text", messageText)
-                    chatManager.StoreMessage(newMessage)
-                    chatManager.UploadMessage(newMessage)
-                }
+                // Use the new newMessage function with callbacks
+                newMessage("text", messageText, null)
                 messageEditText.text.clear()
             }
         }
@@ -109,12 +105,21 @@ class ChatRoomActivity : AppCompatActivity(), ChatManager.ChatUpdateListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == imageRequestCode && resultCode == RESULT_OK) {
             data?.data?.let { uri ->
-                lifecycleScope.launch(Dispatchers.IO) {
-                    val newMessage = chatManager.newMessage("file", "Image", uri)
-                    chatManager.StoreMessage(newMessage)
-                    chatManager.UploadMessage(newMessage)
-                }
+                // Use the new newMessage function with callbacks for image
+                newMessage("file", "Image", uri)
             }
         }
+    }
+
+    private fun newMessage(messageType: String, content: String, uri: Uri?){
+        chatManager.newMessage(messageType, content, uri,
+            onSuccess = { newMessage ->
+                chatManager.storeMessage(newMessage)
+                chatManager.uploadMessage(newMessage)
+            },
+            onError = { error ->
+                Log.e("ChatRoomActivity", "Failed to create message: ${error.message}")
+            }
+        )
     }
 }

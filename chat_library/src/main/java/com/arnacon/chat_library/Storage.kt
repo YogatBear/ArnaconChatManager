@@ -36,4 +36,8 @@ class Storage(context: Context) {
     fun getFileUri(messageId: String): Uri? {
         return fileManager.getFileUri(messageId)
     }
+
+    fun deleteDatabase(context:Context) {
+        context.deleteDatabase(DatabaseHelper.DATABASE_NAME)
+    }
 }

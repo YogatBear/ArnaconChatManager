@@ -5,6 +5,7 @@ import android.net.Uri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ChatManager(context: Context, private val user: String) {
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -28,26 +29,19 @@ class ChatManager(context: Context, private val user: String) {
         val messageBuilder = Message.Builder().type(messageType)
 
         val contentJson = when (messageType) {
-            "text" -> metadata.textMetadata(user, content)
-            "file" -> {
-                uri?.let {
-                    val messageId = messageBuilder.getMessageId()
-                    storage.uploadFile(user, messageId, it.toString())
-                } ?: throw IllegalArgumentException("URI must be provided for file messages.")
+                else -> onError(IllegalArgumentException("Invalid message type: $messageType"))
             }
-            else -> throw IllegalArgumentException("Invalid message type: $messageType")
         }
-
-        return messageBuilder.content(contentJson).build()
     }
 
-    fun StoreMessage(message: Message) {
+
+    fun storeMessage(message: Message) {
         storage.storeMessage(message)
 
         displayMessage(message)
     }
 
-    fun UploadMessage(message: Message) {
+    fun uploadMessage(message: Message) {
         pubSub.uploadMessage(message)
     }
 
@@ -67,7 +61,7 @@ class ChatManager(context: Context, private val user: String) {
         updateListener?.onNewMessages(displayedMessages)
     }
 
-    private fun displayMessage(message: Message){
+    fun displayMessage(message: Message){
         val displayedMessage = DisplayedMessage.fromMessage(message, storage)
         updateListener?.onNewMessage(displayedMessage)
     }
