@@ -25,10 +25,27 @@ class ChatManager(context: Context, private val user: String) {
         fun onNewMessages(displayedMessages: List<DisplayedMessage>)
     }
 
-    suspend fun newMessage(messageType: String, content: String, uri: Uri? = null): Message {
+    fun newMessage(messageType: String, content: String, uri: Uri?, onSuccess: (Message) -> Unit, onError: (Throwable) -> Unit) {
         val messageBuilder = Message.Builder().type(messageType)
+        scope.launch {
+            when (messageType) {
+                "text" -> {
+                    val contentJson = metadata.textMetadata(user, content)
+                    val message = messageBuilder.content(contentJson).build()
+                    onSuccess(message)
+                }
 
-        val contentJson = when (messageType) {
+                "file" -> {
+                    try {
+                        val messageId = messageBuilder.getMessageId() // Assuming getMessageId() is static or appropriately instantiated
+                        val fileMetadata = storage.uploadFile(user, messageId, uri.toString())
+                        val message = messageBuilder.content(fileMetadata).build()
+                        withContext(Dispatchers.Main) { onSuccess(message) }
+                    } catch (e: Throwable) {
+                        withContext(Dispatchers.Main) { onError(e) }
+                    }
+                }
+
                 else -> onError(IllegalArgumentException("Invalid message type: $messageType"))
             }
         }
