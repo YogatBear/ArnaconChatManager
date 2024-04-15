@@ -47,7 +47,7 @@ class ChatRoomActivity : AppCompatActivity(), ChatManager.ChatUpdateListener {
         chatManager = ChatManager(this, username)
         chatManager.updateListener = this
 
-        chatManager.loadRecentMessages()
+        chatManager.loadRecentMessages(0,10,sessionId)
 
         sendButton.setOnClickListener {
             val messageText = messageEditText.text.toString()

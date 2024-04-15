@@ -81,6 +81,14 @@ class FileManager(private val context: Context, private val fileSharingStrategy:
         }
     }
 
+    fun fileExists(messageId: String): Boolean {
+        val downloadFolder = getAppSpecificExternalDir()
+        val files = downloadFolder.listFiles { _, name -> name.startsWith(messageId) }
+        val fileExists = files?.any() == true
+        Log.d("FileManager", "File exists check for $messageId: $fileExists")
+        return fileExists
+    }
+
     fun getFileUri(messageId: String): Uri? {
         try {
             val downloadFolder = getAppSpecificExternalDir()
