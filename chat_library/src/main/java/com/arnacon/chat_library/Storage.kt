@@ -7,7 +7,7 @@ import org.json.JSONObject
 class Storage(context: Context) {
 
     private val index: Index = SQLiteIndex(DatabaseHelper(context))
-    private val fileManager = FileManager(context,GCS())
+    private val fileManager = FileManager(context,IPFS())
 
     fun storeMessage(message: Message, sessionId: String) {
         index.storeMessage(message, sessionId)

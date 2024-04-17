@@ -5,6 +5,8 @@ import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withTimeoutOrNull
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
@@ -28,7 +30,6 @@ class FileManager(private val context: Context, private val fileSharingStrategy:
                 Log.d("FileManager", "Directory created: ${directory.absolutePath}")
             }
         }
-        Log.e("FileManager", directory.absolutePath)
         return directory
     }
 
@@ -69,24 +70,29 @@ class FileManager(private val context: Context, private val fileSharingStrategy:
         return fileName.substringAfterLast('.', "")
     }
 
-    suspend fun downloadFile(messageId: String, cid: String): File? {
-        return try {
-            val destinationFile = File(getAppSpecificExternalDir(), messageId)
-            // ipfsService.downloadFromIPFS(cid, destinationFile)
-            fileSharingStrategy.downloadFile(cid, destinationFile)
-            destinationFile
-        } catch (e: IOException) {
-            Log.e("FileManager", "Error downloading file: ${e.message}")
-            null
-        }
-    }
 
-    fun fileExists(messageId: String): Boolean {
-        val downloadFolder = getAppSpecificExternalDir()
-        val files = downloadFolder.listFiles { _, name -> name.startsWith(messageId) }
-        val fileExists = files?.any() == true
-        Log.d("FileManager", "File exists check for $messageId: $fileExists")
-        return fileExists
+    suspend fun downloadFile(messageId: String, cid: String): File? {
+        val maxRetries = 3
+        var attempt = 0
+        var lastError: Throwable? = null
+
+        while (attempt < maxRetries) {
+            try {
+                val destinationFile = File(getAppSpecificExternalDir(), messageId)
+                fileSharingStrategy.downloadFile(cid, destinationFile)
+                return destinationFile
+            } catch (e: IOException) {
+                lastError = e
+                attempt++
+                Log.e("FileManager", "Attempt $attempt failed with error: ${e.message}")
+                if (attempt < maxRetries) {
+                    delay(5000)
+                }
+            }
+        }
+
+        Log.e("FileManager", "Failed to download file after $maxRetries attempts", lastError)
+        return null
     }
 
     fun getFileUri(messageId: String): Uri? {
