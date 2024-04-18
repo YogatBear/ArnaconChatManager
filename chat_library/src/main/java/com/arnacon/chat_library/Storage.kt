@@ -44,10 +44,6 @@ class Storage(context: Context) {
         fileManager.downloadFile(messageId, cid)
     }
 
-    fun fileExists(messageId: String): Boolean{
-        return fileManager.fileExists(messageId)
-    }
-
     fun getFileUri(messageId: String): Uri? {
         return fileManager.getFileUri(messageId)
     }
